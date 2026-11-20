@@ -107,6 +107,37 @@ dialog::backdrop{background:#0008}
 #pc .sk{display:flex;flex-wrap:wrap;gap:8px}
 #pc .sk span{border:2px solid #111;background:#e2462d;color:#fff;border-radius:999px;padding:3px 14px;font-weight:700;font-size:14px}
 #pc .rl{display:grid;grid-template-columns:6em 1fr;gap:6px 10px;font-size:13.5px}#pc .rl b{font-weight:900}
+nav.tabs{display:flex;gap:6px;margin:14px 0 0;border-bottom:3px solid var(--line)}
+nav.tabs a{padding:10px 16px;font-weight:900;color:var(--ink);text-decoration:none;border:2.5px solid var(--line);border-bottom:0;border-radius:9px 9px 0 0;margin-bottom:-3px;background:var(--soft)}
+nav.tabs a[aria-current=page]{background:var(--card)}
+nav.tabs a .tag{font-size:12px;font-weight:700;margin-left:6px;padding:1px 7px;border-radius:999px;background:var(--hi);color:var(--hiInk)}
+.view[hidden]{display:none}
+.ext-head{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;margin:16px 0}
+.ext-head h2{margin:0;font-size:clamp(22px,3.4vw,30px);font-weight:900;line-height:1.1}
+.switch{display:inline-flex;align-items:center;gap:10px;font-weight:900;cursor:pointer;border:2.5px solid var(--line);border-radius:999px;padding:6px 16px 6px 6px;min-height:44px;background:var(--card)}
+.switch input{appearance:none;width:52px;height:30px;border-radius:999px;background:var(--soft);border:2px solid var(--line);position:relative;margin:0;min-height:0;padding:0;cursor:pointer}
+.switch input::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--ink);transition:left .2s}
+.switch input:checked{background:var(--hi)}.switch input:checked::after{left:25px;background:#fff}
+.credit{font-size:14px;color:var(--mute);max-width:70ch}
+.cat{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:14px}
+.pet{border:2.5px solid var(--line);border-radius:12px;background:var(--card);display:flex;flex-direction:column}
+.pet.hit{box-shadow:0 0 0 4px var(--hi)}
+.pet header{display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);border-radius:9px 9px 0 0;padding:8px 12px}
+.pet header .no{font-weight:900;font-size:22px;border:2px solid currentColor;border-radius:7px;min-width:2em;text-align:center}
+.pet header h3{margin:0;font-size:19px;font-weight:900;line-height:1.2}
+.pet header .pr{margin-left:auto;font-size:13px;opacity:.8;text-align:right}
+.pet .bd{padding:10px 12px;display:grid;gap:8px;font-size:14px;flex:1}
+.pet .sts{display:flex;flex-wrap:wrap;gap:6px}
+.pet .sts span{border:2px solid var(--line);border-radius:7px;padding:1px 8px;font-weight:700;white-space:nowrap}
+.pet .sts span.wide{white-space:normal}
+.pet .kv2{display:grid;grid-template-columns:4.6em 1fr;gap:3px 8px}.pet .kv2 b{font-weight:900}
+.pet .ben{background:var(--pill);border:2px solid var(--pillLine);border-radius:8px;padding:6px 9px}
+.pet footer{padding:0 12px 12px}
+.pet footer button{width:100%}
+.alienrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.alienrow select{flex:1 1 12em}
+.tal{background:var(--pill);border:2px solid var(--pillLine);border-radius:9px;padding:10px 12px}
+.astats{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.astats span{border:2px solid var(--line);border-radius:7px;padding:2px 9px;font-weight:700;font-size:14px}
 @keyframes pop{from{transform:scale(.85)}to{transform:scale(1)}}
 .pop{animation:pop .25s ease-out}
 @media (prefers-reduced-motion:reduce){.pop{animation:none}.toast{transition:none}}
@@ -544,6 +575,23 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     </div>
   </header>
 
+  <nav class="tabs" aria-label="页面">
+    <a href="#builder" id="tabB">宠物车卡</a>
+    <a href="#ext" id="tabE">扩展：外星宠物<span class="tag" id="extTag" hidden>已启用</span></a>
+  </nav>
+
+  <div class="view" id="viewExt" hidden>
+    <div class="ext-head">
+      <h2>外星宠物：务必阅读小字条款！</h2>
+      <label class="switch"><input type="checkbox" id="extOn"> 启用扩展</label>
+      <button id="extRoll" class="dark">投 1D10 抽宠物</button>
+    </div>
+    <p class="credit">启用后，车卡第 1 步会多出「外星宠物」类型。这里只收录扩展中可以给玩家看的宠物信息（说明文字已改写精简）；监守专属的「小字条款」不在此列。原作：卡达斯合作社（Kadathian Collective），基于 Tuesday Knight Games 的 Mothership；中文版翻译：大芊 &amp; Workbuddy。完整内容请看原书。</p>
+    <p class="credit">「购买价格」只在主动去找宠物时才用；在上岸休假后投到的宠物，费用默认已包含在休假开销里。</p>
+    <div class="cat" id="cat"></div>
+  </div>
+
+  <div class="view" id="viewB">
   <div class="bar">
     <button class="dark" id="randAll">一键全部随机</button>
     <button id="reset">清空重置</button>
@@ -562,6 +610,13 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     <section class="box">
       <h2>2. 宠物资料</h2>
       <div class="fields">
+        <div class="wide" id="alienBox" hidden>
+          <div style="font-size:14px;font-weight:700;margin-bottom:4px">外星宠物 (1D10)</div>
+          <div class="alienrow"><select id="alienSel" aria-label="外星宠物"></select><button class="sm dark" id="alienRoll">投</button></div>
+          <div class="mode" id="stageBox" style="margin:8px 0 0" hidden><button data-stage="juv">幼体</button><button data-stage="adult">成年体</button></div>
+          <label style="display:grid;gap:4px;font-size:14px;font-weight:700;margin-top:8px">宠物受伤 / 死亡时参照
+            <select id="alienBase"><option value="organic">有机宠物规则</option><option value="synthetic">合成宠物规则</option></select></label>
+        </div>
         <label>宠物名 <span class="inrow"><input id="name"><button class="sm" data-r="name">投</button></span></label>
         <label>物种 / 型号 <span class="inrow"><input id="species"><button class="sm" data-r="species">投</button></span></label>
         <label class="wide">怪癖 (1D10) <span class="inrow"><input id="quirk"><button class="sm" data-r="quirk">投</button></span></label>
@@ -570,13 +625,14 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     </section>
 
     <section class="box">
-      <h2>3. 投本能 <span class="note" id="instFormula"></span><span class="r"><button class="sm dark" id="rollInst">投</button></span></h2>
+      <h2><span id="s3t">3. 投本能</span> <span class="note" id="instFormula"></span><span class="r"><button class="sm dark" id="rollInst">投</button></span></h2>
       <div class="stat">
         <div class="circle" id="instCircle"><div class="v" id="instV">--</div><div class="d" id="instD">未投骰</div></div>
         <div>
           <label class="note" for="instEdit">手动修改</label><br>
           <input id="instEdit" type="number" min="0" max="99" style="width:6em">
-          <p class="note" style="margin:8px 0 0">本能是宠物唯一的属性，所有检定都用它。</p>
+          <p class="note" style="margin:8px 0 0" id="instNote">本能是宠物唯一的属性，所有检定都用它。</p>
+          <div class="astats" id="astats" hidden></div>
         </div>
       </div>
       <hr style="border:0;border-top:3px solid var(--soft);margin:14px 0">
@@ -595,6 +651,8 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     </section>
 
     <section class="box">
+      <div id="talBox" hidden><h2>5. 才能</h2><div class="tal" id="talent"></div><p class="note">外星宠物没有技能，按书中描述的才能行事。</p></div>
+      <div id="skillBox">
       <h2>5. 选择技能 <span class="note" id="skillRule"></span><span class="r"><button class="sm" id="randSkill">随机</button><button class="sm" id="clrSkill">重置</button></span></h2>
       <div class="mode" id="mode">
         <button data-m="O">有机：1 项受训技能</button><button data-m="A">合成 A：2 项受训技能</button><button data-m="B">合成 B：1 项专家技能</button>
@@ -602,6 +660,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
       <div class="cols">
         <div><h3>受训技能 (+10)</h3><div class="pills" id="trained"></div></div>
         <div><h3>专家技能 (+15)</h3><div class="pills" id="expert"></div></div>
+      </div>
       </div>
     </section>
 
@@ -628,6 +687,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
       <ul class="log" id="log"></ul>
     </section>
   </div>
+  </div>
 </div>
 </div>
 
@@ -649,6 +709,48 @@ const TYPES={
     list:['损伤 2（生命值 15）','本能 2d10+30','2 项受训技能或 1 项专家技能','休息豁免 +5'],
     rest:'休息豁免 +5',hurt:'只要宠物遭受伤害，主人就要通过理智豁免，否则获得 1 压力。',death:'若宠物被摧毁，主人获得 1 压力。'}
 };
+const ALIENS=[
+ {n:'拟声狐',o:'猎户座四边形星团',p:'2.5 万 cr（口粮 50cr/月）',st:{c:40,dm:'1d5（出血）',i:55,w:1,h:10},
+  rest:'休息豁免 [+]；与它在封闭空间同睡一夜，压力 −1',tal:'训练后能模仿声音（包括人声），还能按指令发出让人放松的次声波呼噜',
+  care:[['食物','微型蛋白质生物，一天两顿'],['睡眠','每天约 16 小时，爱睡在人身上，"床"一动就烦躁'],['玩耍','每天约 2 小时，模拟捕猎：钻洞、追线头'],['居家训练','会把排泄物藏进嵌板和电线之间，需要下功夫']],
+  life:'最长 12 年',hy:'不建议：可能口吐白沫、长眼虫、变得暴力',cr:'可以同舱，但可能要束缚或镇静',va:'不建议：5 分钟内致命',eat:'低（0.2%）',b:'organic'},
+ {n:'十腕兽',o:'天兔座 B',p:'300cr（食物 50cr/月）',st:{c:60,dm:'1d5（出血；身体豁免失败则麻痹 1 回合）',i:45,w:1,h:10},
+  rest:'主人休息豁免 +5；多数旁人觉得它恶心（他们 −5）',tal:'带毒触手极快，能从约 3.7 米外抓取多个物品；可训练钻缝、用东西换食物，羁绊够深时还能替主人攻击',
+  care:[['食物','小型蛋白质生物，一天一顿'],['睡眠','每天约 2 小时，睡在主人身上或衣帽钩上'],['玩耍','很少，主要靠观察主人'],['居家训练','会跟主人在同一处排泄，无需训练——小心别被冲进下水道']],
+  life:'最长 5 年',hy:'不一定有害：眼睛乱变色，最多 6 天失去精细动作，可能从主人身上掉下来',cr:'可以，而且它很乐意',va:'不建议：5 分钟内致命',eat:'低（0.8%）',b:'organic'},
+ {n:'滴溜球',o:'双子座星系',p:'100cr（食物 5cr/月）',st:{c:10,dm:'1（出血）',i:40,w:1,h:5},
+  rest:'休息豁免 [+]（可爱，爱玩追逐）',tal:'靠近超因果物质时会本能地发出尖锐颤抖的警报，深受神器猎人和捉鬼者欢迎',
+  care:[['食物','小虫子和灰尘，等于一台毛茸茸的扫地机器人'],['睡眠','从没见它睡过'],['玩耍','不需要，整天都在追虫子扫灰'],['居家训练','别让它进乘员舱，会在那里排泄']],
+  life:'最长 2 年；低于 10°C 会无性繁殖',hy:'可接受：除了警报，据知不受影响',cr:'不建议！',va:'不建议：5 分钟内致命',eat:'极低（0.005%）',b:'organic'},
+ {n:'情感支持鹅卵石',o:'基沙尔',p:'10cr（呆萌眼睛另加 5cr）',st:{c:null,dm:'当武器挥：1d5（钝击）',i:null,w:1,h:15,a:10},
+  rest:'休息豁免 +1（需保持接触，越相信它在乎你越有效；分开可能难受）；任务结束休息时带在身边，压力 −1',tal:'暂未发现任何才能。能长期耐受真空、辐射和冷落',
+  care:[['食物','无'],['睡眠','不睡，也不醒，只是存在'],['玩耍','握着它，跟它说话，爱它'],['居家训练','没有排泄记录']],
+  life:'不会死；据说两颗以上接触会慢慢融合',hy:'可接受',cr:'想带就带',va:'无影响',eat:'几乎不可能',b:'synthetic'},
+ {n:'非法赛博共生体',o:'杰佩托九号轨道巨型结构体',p:'约 9000cr（只在 X 级空间站有货）；拖把水桶 5cr，"小心地滑"牌 3cr/块',st:{c:30,dm:'1d10（出血）',i:15,w:2,h:10},
+  rest:'无休息加值',tal:'吃下设备后同化其功能（如盖革计数器、随身摄像头、个人终端），喂得越多功能越多；行为靠喂食计划塑造',
+  care:[['食物','电路碎片、线束、螺丝等小零件'],['睡眠','很少，进食同化时不活动'],['玩耍','不需要，吃饱就配合'],['居家训练','偶尔在地上排油，备好拖把']],
+  life:'4–5 年',hy:'可接受',cr:'可以，但没必要',va:'宇宙背景辐射可能让它行为失常',eat:'3.333%',b:'organic'},
+ {n:'仿生人镜面复制体',o:'奇美拉界面实验室',p:'1199cr',st:{c:10,dm:'1d10/2（钝击）',i:40,w:2,h:15},
+  rest:'与主人同步时，两台仿生人做休息豁免都可以用恐惧代替理智',tal:'主人的迷你复制品，拥有原体的全部才能（面向仿生人主人）',
+  care:[['食物','不进食，定期在仿生人服务站充电'],['睡眠','主人活动时始终在线'],['玩耍','两台仿生人互相观察、保持同步'],['居家训练','不排泄']],
+  life:'看维护，需要仿生人的常规保养',hy:'可接受',cr:'仿生人跃迁时不需要低温休眠',va:'不受影响',eat:'不可能（嘴只是装饰）',b:'synthetic'},
+ {n:'你的完美全息家庭™',o:'万花筒公司',p:'首装 2499cr + 按月订阅',st:{c:null,dm:null,i:null,w:2,h:15,a:7},
+  rest:'视订阅等级，可在船上享受上岸休假',tal:'冰箱大小的全息单元，家人预先校准以提供情感支持；会程序化生成生日、毕业、婚礼等里程碑',
+  care:[['食物','不吃东西，必须持续供电'],['睡眠','作息可与你完全同步'],['玩耍','每位家人都能表达逼真的情绪'],['居家训练','无']],
+  life:'配偶陪你变老，孩子随时间长大',hy:'可接受',cr:'它是全息影像，有点麻烦',va:'不受影响',eat:'几乎不可能',b:'synthetic'},
+ {n:'基因改造迅猛龙',o:'地球',p:'一枚蛋 25 万 cr（食物 10 万 cr/月）',st:{c:10,dm:'1d5（出血）',i:65,w:1,h:5},adult:{c:65,dm:'2d10（出血）',i:65,w:1,h:20},
+  rest:'休息豁免 [+]（非常忠诚）',tal:'听得懂口哨、咔哒声和手势等基本指令，嗅觉和追踪能力顶尖；成长期要训练它把主人当成族群一员',
+  care:[['食物','小型到人类大小的蛋白质生物，一天两顿'],['睡眠','每天约 16 小时'],['玩耍','每天约 3 小时，爱接飞盘，每天至少遛两次'],['居家训练','不在窝里排泄，但遛弯时得有人带袋子']],
+  life:'最长 20 年，1 年内进入青春期',hy:'不建议：可能口吐白沫、长眼虫、变得暴力',cr:'要单独一个休眠舱，可能需镇静',va:'不建议：5 分钟内致命',eat:'可能（2.0%）',b:'organic'},
+ {n:'夜光外星蝾螈',o:'泰盖塔 C',p:'安全提灯 4cr，一窝 10 枚卵 15cr（食物每只 5cr/年）',st:{c:20,dm:'1（钝击）',i:65,w:1,h:5},
+  rest:'休息豁免 [+]',tal:'按背景辐射强弱发光，辐射越强光越红；养在提灯里吃饱时，一天能充满一节高容量电池',
+  care:[['食物','伽马辐射，外加每周一勺鱼食'],['睡眠','每天约 23 小时'],['玩耍','不需要，自己玩得挺好'],['居家训练','最多每 5 个月排一粒无机颗粒，尽快处理']],
+  life:'最长 5 年；卵要在辐射下照 12 小时才孵化',hy:'可接受',cr:'不建议',va:'不建议：5 分钟内致命',eat:'几乎不可能（0.006%）',b:'organic'},
+ {n:'维纳斯食人陷阱',o:'蛇夫座 β',p:'15 万 cr；加固箱运输 500cr，岩石防护服 1000cr（蛋白质 50cr/周）',st:{c:45,dm:'2d10（惨烈&庞大）',i:5,w:2,h:15},
+  rest:'无休息加值（它看起来永远在笑）',tal:'非常有效的守卫。主人至少要穿着防护服完成三轮训练，免得被它当成猎物',
+  care:[['食物','每周一次人类大小的活物或血液'],['睡眠','从不睡'],['玩耍','每周来一次捕食游戏，否则会萎靡'],['居家训练','很少，每年换一次盆']],
+  life:'最长 300 年',hy:'可接受',cr:'不必要',va:'不建议：5 分钟内致命',eat:'可能（3.7%）',b:'organic'}
+];
 const TRAINED=['语言学','动物学','植物学','地质学','工业装备','临时拼凑','化学','计算机','零重力','数学','艺术','考古','神学','军事训练','外环门道','运动'];
 const EXPERT=['心理学','病理学','战地医疗','生态学','小行星采矿','机械修理','爆炸物','药理学','骇入','驾机','物理学','神秘主义','荒野生存','枪械','近身搏斗'];
 const SPECIES={
@@ -661,16 +763,28 @@ const NAMES=['对照组','饼干','螺丝','零号','豆子','小陨石','备份
 const $=id=>document.getElementById(id);
 const d=n=>1+Math.floor(Math.random()*n);
 const pick=a=>a[Math.floor(Math.random()*a.length)];
-const blank=()=>({type:'organic',owner:'',player:'',name:'',species:'',quirk:'',notes:'',inst:null,instDice:null,hp:10,wd:0,mode:'A',skills:[],ownerSan:'',log:[]});
+const blank=()=>({alien:0,stage:'juv',alienBase:'organic',type:'organic',owner:'',player:'',name:'',species:'',quirk:'',notes:'',inst:null,instDice:null,hp:10,wd:0,mode:'A',skills:[],ownerSan:'',log:[]});
 const sample=()=>Object.assign(blank(),{owner:'葛布林',player:'渡鸦',name:'对照组',species:'实验室白鼠',quirk:'会偷亮闪闪的小零件',
   notes:'看起来很正常的白鼠，右耳带有实验室编号。受过基因改造光线照射，目前尚未展现任何异样。由于长期失重实验室的训练，掌握了零重力。',
   inst:49,instDice:[3,6],hp:10,skills:['零重力'],ownerSan:'60'});
 
+let EXT=false;try{EXT=localStorage.getItem('ms-pet-ext')==='1'}catch(e){}
 let S;
 try{S=JSON.parse(localStorage.getItem('ms-pet'))||sample()}catch(e){S=sample()}
 
-const T=()=>TYPES[S.type];
+const A=()=>ALIENS[S.alien]||ALIENS[0];
+const AS=()=>{const a=A();return S.stage==='adult'&&a.adult?a.adult:a.st};
+const isA=()=>S.type==='alien';
+TYPES.alien={label:'外星宠物',list:['扩展《外星宠物》','1D10 抽一只，属性固定','不选技能，按才能行事','休息加值见各宠物']};
+const T=()=>{
+  if(!isA())return TYPES[S.type];
+  const a=A(),s=AS(),b=TYPES[S.alienBase||a.b];
+  return {label:'外星宠物',hp:s.h,wd:s.w,inst:'固定值',base:0,rest:a.rest,
+    hurt:b.hurt+`（扩展未单独规定，此处参照${b.label}宠物规则）`,death:b.death,deathLbl:S.alienBase==='synthetic'?'宠物被摧毁':'宠物遇害'};
+};
+const deathLbl=()=>isA()?T().deathLbl:(S.type==='organic'?'宠物遇害':'宠物被摧毁');
 function limits(){
+  if(isA())return{t:0,e:0,txt:'外星宠物没有技能'};
   if(S.type==='organic')return{t:1,e:0,txt:'选 1 项受训技能'};
   return S.mode==='A'?{t:2,e:0,txt:'选 2 项受训技能'}:{t:0,e:1,txt:'选 1 项专家技能'};
 }
@@ -681,17 +795,48 @@ function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clear
 function log(m){const now=new Date();S.log.unshift({t:now.toTimeString().slice(0,5),m});S.log=S.log.slice(0,40);render()}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
+function statBits(s){const r=[];if(s.c!=null)r.push('战斗 '+s.c);if(s.dm)r.push('伤害 '+s.dm);r.push('本能 '+(s.i??'—'));r.push(`损伤 ${s.w}（生命值 ${s.h}）`);if(s.a)r.push('护甲 '+s.a);return r}
+function petCard(a,i){
+  const st=a.adult?`<div><b>幼体</b></div><div class="sts">${statBits(a.st).map(x=>`<span${x.length>14?' class="wide"':''}>${x}</span>`).join('')}</div><div><b>成年体</b></div><div class="sts">${statBits(a.adult).map(x=>`<span${x.length>14?' class="wide"':''}>${x}</span>`).join('')}</div>`
+    :`<div class="sts">${statBits(a.st).map(x=>`<span${x.length>14?' class="wide"':''}>${x}</span>`).join('')}</div>`;
+  return `<article class="pet" id="pet${i}"><header><span class="no">${(i+1)%10}</span><h3>${a.n}</h3><span class="pr">${a.o}</span></header>
+  <div class="bd">${st}<div class="ben"><b>益处：</b>${a.rest}</div><div><b>才能：</b>${a.tal}</div>
+  <div class="kv2"><b>价格</b><span>${a.p}</span>${a.care.map(([k,v])=>`<b>${k}</b><span>${v}</span>`).join('')}<b>寿命</b><span>${a.life}</span><b>超空间</b><span>${a.hy}</span><b>低温休眠</b><span>${a.cr}</span><b>真空</b><span>${a.va}</span><b>吞噬主人</b><span>${a.eat}</span></div></div>
+  <footer><button data-take="${i}"${EXT?'':' disabled title="先启用扩展"'}>${EXT?'带上这只去车卡':'启用扩展后可选'}</button></footer></article>`;
+}
+function setAlien(i,pre){
+  const a=ALIENS[i];S.type='alien';S.alien=i;S.stage='juv';S.alienBase=a.b;
+  const s=AS();S.inst=s.i;S.instDice=null;S.hp=s.h;S.wd=0;S.species=a.n;S.skills=[];
+  log(`${pre}${a.n}`);
+}
 function render(){
   const t=T();
-  $('types').innerHTML=Object.entries(TYPES).map(([k,v])=>`<button class="type" data-type="${k}" aria-pressed="${S.type===k}"><strong>${v.label}</strong><ul>${v.list.map(x=>`<li>${x}</li>`).join('')}</ul></button>`).join('');
+  $('viewExt').hidden=location.hash!=='#ext';$('viewB').hidden=location.hash==='#ext';
+  $('tabE').toggleAttribute('aria-current',location.hash==='#ext');$('tabB').toggleAttribute('aria-current',location.hash!=='#ext');
+  if($('tabE').hasAttribute('aria-current'))$('tabE').setAttribute('aria-current','page');if($('tabB').hasAttribute('aria-current'))$('tabB').setAttribute('aria-current','page');
+  $('extTag').hidden=!EXT;$('extOn').checked=EXT;
+  $('cat').innerHTML=ALIENS.map((a,i)=>petCard(a,i)).join('');
+  $('types').innerHTML=Object.entries(TYPES).filter(([k])=>k!=='alien'||EXT).map(([k,v])=>`<button class="type" data-type="${k}" aria-pressed="${S.type===k}"><strong>${v.label}</strong><ul>${v.list.map(x=>`<li>${x}</li>`).join('')}</ul></button>`).join('');
   for(const f of ['owner','player','name','species','quirk','notes','ownerSan'])if(document.activeElement!==$(f))$(f).value=S[f]??'';
-  $('instFormula').textContent=t.inst;
+  $('instFormula').textContent=isA()?'':t.inst;
+  $('s3t').textContent=isA()?'3. 本能与属性':'3. 投本能';
+  $('rollInst').hidden=isA();
+  $('instNote').textContent=isA()?'外星宠物的属性是固定的。':'本能是宠物唯一的属性，所有检定都用它。';
+  $('alienBox').hidden=!isA();
+  if(isA()){
+    $('alienSel').innerHTML=ALIENS.map((a,i)=>`<option value="${i}">${(i+1)%10}. ${a.n}</option>`).join('');$('alienSel').value=S.alien;
+    $('stageBox').hidden=!A().adult;$('stageBox').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.stage===S.stage));
+    $('alienBase').value=S.alienBase;
+    const s=AS();$('astats').innerHTML=statBits(s).map(x=>`<span>${x}</span>`).join('');
+    $('talent').textContent=A().tal;
+  }
+  $('astats').hidden=!isA();$('talBox').hidden=!isA();$('skillBox').hidden=isA();
   $('instV').textContent=S.inst??'--';
-  $('instD').textContent=S.instDice?`${S.instDice.join('+')}+${t.base}`:(S.inst!=null?'手动':'未投骰');
+  $('instD').textContent=isA()?(S.inst==null?'无本能':'固定'):S.instDice?`${S.instDice.join('+')}+${t.base}`:(S.inst!=null?'手动':'未投骰');
   if(document.activeElement!==$('instEdit'))$('instEdit').value=S.inst??'';
   $('hpC').textContent=S.hp;$('hpM').textContent=t.hp;$('wdC').textContent=S.wd;$('wdM').textContent=t.wd;
   const st=$('status');
-  if(S.wd>=t.wd){st.textContent=S.type==='organic'?'宠物已遇害':'宠物已被摧毁';st.className='status bad'}
+  if(S.wd>=t.wd){st.textContent=deathLbl()==='宠物遇害'?'宠物已遇害':'宠物已被摧毁';st.className='status bad'}
   else if(S.wd>0||S.hp<t.hp){st.textContent='受伤';st.className='status'}
   else{st.textContent='状态良好';st.className='status'}
   const L=limits();
@@ -702,7 +847,8 @@ function render(){
   const pill=(s,max,n)=>{const on=S.skills.includes(s);const off=!on&&(max===0||n>=max);return `<button class="pill${off?' off':''}" data-skill="${s}" aria-pressed="${on}"${off?' aria-disabled="true"':''}>${s}</button>`};
   $('trained').innerHTML=TRAINED.map(s=>pill(s,L.t,nt)).join('');
   $('expert').innerHTML=EXPERT.map(s=>pill(s,L.e,ne)).join('');
-  $('rules').innerHTML=[['休息',t.rest],['宠物受伤',t.hurt],[S.type==='organic'?'宠物遇害':'宠物被摧毁',t.death]].map(([a,b])=>`<div class="rule"><b>${a}</b><span>${b}</span></div>`).join('');
+  const ex=isA()?[...A().care,['寿命',A().life],['超空间',A().hy],['低温休眠',A().cr],['真空',A().va],['吞噬主人',A().eat]]:[];
+  $('rules').innerHTML=[['休息',t.rest],['宠物受伤',t.hurt],[deathLbl(),t.death],...ex].map(([a,b])=>`<div class="rule"><b>${a}</b><span>${b}</span></div>`).join('');
   const cur=$('chkSkill').value;
   $('chkSkill').innerHTML='<option value="">不加技能</option>'+S.skills.map(s=>`<option value="${s}">${s} +${skillVal(s)}</option>`).join('');
   if(S.skills.includes(cur))$('chkSkill').value=cur;
@@ -718,14 +864,15 @@ function randSkills(){
 }
 function setType(k){
   if(k===S.type)return;
-  S.type=k;S.hp=T().hp;S.wd=0;S.skills=[];
-  if(S.instDice)S.inst=S.instDice[0]+S.instDice[1]+T().base;
+  if(k==='alien'){setAlien(S.alien||0,'切换为外星宠物：');return}
+  const wasA=isA();S.type=k;S.hp=T().hp;S.wd=0;S.skills=[];
+  if(S.instDice)S.inst=S.instDice[0]+S.instDice[1]+T().base;else if(wasA){S.inst=null}
   S.species='';render();
 }
 function d100(){return Math.floor(Math.random()*100)}
 
 function check(){
-  if(S.inst==null){toast('先投本能');return}
+  if(S.inst==null){toast(isA()?'这只宠物没有本能，无法检定':'先投本能');return}
   const sk=$('chkSkill').value,bonus=sk?skillVal(sk):0,target=S.inst+bonus,adv=+$('adv').value;
   let rolls=[d100()];if(adv)rolls.push(d100());
   const ok=r=>r<target&&r<90;
@@ -742,13 +889,14 @@ function check(){
 function ownerReact(kind){
   const t=T();
   if(kind==='hurt'){
-    if(S.type==='organic'){log('→ 主人获得 1 压力');return}
+    const kind2=isA()?S.alienBase:S.type;
+    if(kind2==='organic'){log('→ 主人获得 1 压力');return}
     const san=parseInt(S.ownerSan,10);
     if(isNaN(san)){log('→ 主人需进行理智豁免，失败则获得 1 压力');return}
     const r=d100(),ok=r<san&&r<90;
     log(`→ 主人理智豁免：${String(r).padStart(2,'0')} vs ${san} → ${ok?'成功，无事':'失败，主人获得 1 压力'}`);
   }else{
-    log(S.type==='organic'?'→ 主人进行惊恐检定（1D20，≤ 当前压力即失败），压力下限 +1':'→ 主人获得 1 压力');
+    log((isA()?S.alienBase:S.type)==='organic'?'→ 主人进行惊恐检定（1D20，≤ 当前压力即失败），压力下限 +1':'→ 主人获得 1 压力');
   }
 }
 function hurt(n){
@@ -758,7 +906,7 @@ function hurt(n){
   if(S.hp<=0){S.wd++;S.hp=t.hp;msg+=`，生命值归零 → 损伤 ${S.wd}/${t.wd}`}
   else msg+=`，生命值 ${S.hp}/${t.hp}`;
   log(msg);ownerReact('hurt');
-  if(S.wd>=t.wd){log(S.type==='organic'?'宠物遇害。':'宠物被摧毁。');ownerReact('death')}
+  if(S.wd>=t.wd){log(deathLbl()+'。');ownerReact('death')}
 }
 
 function dialog(title,body,actions){
@@ -767,7 +915,8 @@ function dialog(title,body,actions){
   $('dlg').showModal();
 }
 function stText(){
-  const parts=[`本能${S.inst??0}`,`生命值${S.hp}`,`生命值上限${T().hp}`,`损伤${S.wd}`,`损伤上限${T().wd}`,...S.skills.map(s=>`${s}${skillVal(s)}`)];
+  const s=isA()?AS():{};
+  const parts=[...(S.inst!=null?[`本能${S.inst}`]:[]),...(s.c!=null?[`战斗${s.c}`]:[]),...(s.a?[`护甲${s.a}`]:[]),`生命值${S.hp}`,`生命值上限${T().hp}`,`损伤${S.wd}`,`损伤上限${T().wd}`,...S.skills.map(s=>`${s}${skillVal(s)}`)];
   return '.st '+parts.join(' ');
 }
 async function copy(txt,ok){try{await navigator.clipboard.writeText(txt);toast(ok)}catch(e){dialog('手动复制',`<pre class="st">${esc(txt)}</pre>`,[['关闭',()=>{}]])}}
@@ -777,7 +926,10 @@ document.addEventListener('click',e=>{
   if(b.dataset.type)setType(b.dataset.type);
   else if(b.dataset.r){const k=b.dataset.r;
     if(k==='quirk'){const i=d(10);S.quirk=QUIRKS[i-1];log(`怪癖 1D10 = ${i}：${S.quirk}`)}
+    else if(k==='species'&&isA()){const i=d(10);setAlien(i-1,`外星宠物 1D10 = ${i%10}：`)}
     else{S[k]=k==='name'?pick(NAMES):pick(SPECIES[S.type]);render()}}
+  else if(b.dataset.take){setAlien(+b.dataset.take,'从扩展选择：');location.hash='#builder'}
+  else if(b.dataset.stage){S.stage=b.dataset.stage;const s=AS();S.inst=s.i;S.hp=s.h;S.wd=Math.min(S.wd,s.w);log(`迅猛龙切换为${S.stage==='adult'?'成年体':'幼体'}`)}
   else if(b.dataset.hp){S.hp=Math.max(0,Math.min(T().hp,S.hp+ +b.dataset.hp));render()}
   else if(b.dataset.wd){S.wd=Math.max(0,Math.min(T().wd,S.wd+ +b.dataset.wd));render()}
   else if(b.dataset.m){const m=b.dataset.m;
@@ -793,9 +945,19 @@ $('randSkill').onclick=()=>{randSkills();render()};
 $('clrSkill').onclick=()=>{S.skills=[];render()};
 $('chk').onclick=check;
 $('hurt').onclick=()=>hurt(Math.max(1,parseInt($('dmg').value,10)||1));
-$('kill').onclick=()=>{if(S.wd>=T().wd)return toast('宠物已经没了');S.wd=T().wd;log(S.type==='organic'?'宠物遇害。':'宠物被摧毁。');ownerReact('death')};
-$('randAll').onclick=()=>{const keep={owner:S.owner,player:S.player,ownerSan:S.ownerSan};S=Object.assign(blank(),keep);S.type=Math.random()<.5?'organic':'synthetic';S.mode=Math.random()<.5?'A':'B';
+$('kill').onclick=()=>{if(S.wd>=T().wd)return toast('宠物已经没了');S.wd=T().wd;log(deathLbl()+'。');ownerReact('death')};
+$('randAll').onclick=()=>{const keep={owner:S.owner,player:S.player,ownerSan:S.ownerSan};S=Object.assign(blank(),keep);
+  if(EXT&&Math.random()<1/3){S.name=pick(NAMES);S.quirk=pick(QUIRKS);const i=d(10);setAlien(i-1,`随机生成：外星宠物「${S.name}」，1D10 = ${i%10}：`);return}
+  S.type=Math.random()<.5?'organic':'synthetic';S.mode=Math.random()<.5?'A':'B';
   S.name=pick(NAMES);S.species=pick(SPECIES[S.type]);S.quirk=pick(QUIRKS);S.hp=T().hp;randSkills();rollInst();log(`随机生成：${TYPES[S.type].label}宠物「${S.name}」，${S.species}`)};
+$('extOn').addEventListener('change',e=>{EXT=e.target.checked;try{localStorage.setItem('ms-pet-ext',EXT?'1':'0')}catch(_){}
+  if(!EXT&&isA()){S.type='organic';S.hp=TYPES.organic.hp;S.wd=0;S.inst=null;S.instDice=null;S.species='';toast('已关闭扩展，宠物类型改回有机')}
+  else toast(EXT?'已启用外星宠物扩展':'已关闭外星宠物扩展');render()});
+$('extRoll').onclick=()=>{const i=d(10);render();const el=$('pet'+(i-1));el.classList.add('hit');el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'center'});toast(`1D10 = ${i%10}：${ALIENS[i-1].n}`)};
+$('alienSel').addEventListener('change',e=>setAlien(+e.target.value,'选择外星宠物：'));
+$('alienRoll').onclick=()=>{const i=d(10);setAlien(i-1,`外星宠物 1D10 = ${i%10}：`)};
+$('alienBase').addEventListener('change',e=>{S.alienBase=e.target.value;render()});
+addEventListener('hashchange',()=>{render();scrollTo(0,0)});
 $('reset').onclick=()=>dialog('清空重置？','<p>当前宠物档案会被清空，记录也会删除。</p>',[['取消',()=>{}],['清空',()=>{S=blank();render()},true]]);
 let DL=null;
 async function getDL(){
@@ -825,10 +987,11 @@ function card(){
   <div class="row"><div class="pb"><h2>宠物资料</h2><dl class="kv"><dt>宠物名</dt><dd>${v(S.name)}</dd><dt>类型</dt><dd>${t.label}</dd><dt>物种</dt><dd>${v(S.species)}</dd><dt>怪癖</dt><dd>${v(S.quirk)}</dd></dl></div>
   <div class="pb"><h2>属性</h2><div class="stats"><div class="cc"><div class="v">${S.inst??'--'}</div><div class="l">本能 ${t.inst}</div></div>
   <div class="bx">生命值<br><span class="n">${S.hp} / ${t.hp}</span></div><div class="bx">损伤<br><span class="n">${S.wd} / ${t.wd}</span></div></div></div></div>
-  <div class="pb"><h2>宠物笔记</h2><div class="nt">${esc(S.notes||'')}</div></div>
-  <div class="pb"><h2>技能 · ${limits().txt}</h2><div class="sk">${S.skills.map(s=>`<span>${s} +${skillVal(s)}</span>`).join('')||'<em style="color:#888">未选择</em>'}</div></div>
-  <div class="pb pk"><h2>主人须知</h2><div class="rl"><b>休息</b><span>${t.rest}</span><b>宠物受伤</b><span>${t.hurt}</span><b>${S.type==='organic'?'宠物遇害':'宠物被摧毁'}</b><span>${t.death}</span></div></div>
-  <div class="pb"><h2>检定</h2><div style="font-size:13px">本能检定：D100 低于本能（+技能加值）即成功；90–99 必定失败；出对子为大成功/大失败。</div></div>`;
+  <div class="pb"><h2>宠物笔记</h2><div class="nt"${isA()?' style="height:130px"':''}>${esc(S.notes||'')}</div></div>
+  ${isA()?`<div class="pb"><h2>属性与才能</h2><div class="sk" style="margin-bottom:8px">${statBits(AS()).map(x=>`<span style="background:#fff;color:#111">${x}</span>`).join('')}</div><div style="font-size:13.5px">${esc(A().tal)}</div></div>`
+  :`<div class="pb"><h2>技能 · ${limits().txt}</h2><div class="sk">${S.skills.map(s=>`<span>${s} +${skillVal(s)}</span>`).join('')||'<em style="color:#888">未选择</em>'}</div></div>`}
+  <div class="pb pk"><h2>主人须知</h2><div class="rl"><b>休息</b><span>${t.rest}</span><b>宠物受伤</b><span>${t.hurt}</span><b>${deathLbl()}</b><span>${t.death}</span>${isA()?A().care.map(([k,v])=>`<b>${k}</b><span>${v}</span>`).join('')+`<b>超空间</b><span>${A().hy}</span><b>低温休眠</b><span>${A().cr}</span><b>真空</b><span>${A().va}</span>`:''}</div></div>
+  ${isA()?'':`<div class="pb"><h2>检定</h2><div style="font-size:13px">本能检定：D100 低于本能（+技能加值）即成功；90–99 必定失败；出对子为大成功/大失败。</div></div>`}`;
 }
 $('pdfBtn').onclick=async()=>{
   const b=$('pdfBtn');if(b.disabled)return;b.disabled=true;b.textContent='生成中…';
@@ -843,9 +1006,9 @@ $('pdfBtn').onclick=async()=>{
   }catch(e){toast('PDF 生成失败，请重试')}
   finally{b.disabled=false;b.textContent='导出 PDF'}
 };
-$('stBtn').onclick=()=>{if(S.inst==null)return toast('先投本能');copy(stText(),'录卡指令已复制')};
+$('stBtn').onclick=()=>{if(S.inst==null&&!isA())return toast('先投本能');copy(stText(),'录卡指令已复制')};
 $('loadBtn').onclick=()=>dialog('读取存档',`<p class="note">粘贴之前复制的 JSON，或选择 .json 文件。</p><textarea id="ldTxt" placeholder='{"type":"organic",...}'></textarea><p><input type="file" id="ldFile" accept=".json,application/json"></p>`,[['取消',()=>{}],['读取',()=>{
-  try{const o=JSON.parse($('ldTxt').value);if(!TYPES[o.type])throw 0;S=Object.assign(blank(),o);render();toast('已读取存档')}catch(e){toast('存档格式不对');return false}},true]]);
+  try{const o=JSON.parse($('ldTxt').value);if(!TYPES[o.type])throw 0;if(o.type==='alien'&&!EXT){EXT=true;try{localStorage.setItem('ms-pet-ext','1')}catch(_){}}S=Object.assign(blank(),o);render();toast('已读取存档')}catch(e){toast('存档格式不对');return false}},true]]);
 document.addEventListener('change',e=>{if(e.target.id==='ldFile'&&e.target.files[0])e.target.files[0].text().then(t=>$('ldTxt').value=t)});
 
 render();
